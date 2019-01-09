@@ -79,8 +79,9 @@ replace()
 agg_err = errors(AggCluster)
 k_err = errors(KCluster)
 
-print("agg: ", agg_err, "\nk_err: ",k_err)
-'''
+print("Aggregative:\nMisclassified points: ", agg_err[0], "\n Error Percentual: (#data in the wrong cluster) / (# cluster size): \n Cluster 0, 1, 2:",agg_err[1]*100, agg_err[2],agg_err[3])
+print("K-means:\nMisclassified points: ", k_err[0], "\n Error Percentual: (#data in the wrong cluster) / (# cluster size): \n Cluster 0, 1, 2:",k_err[1]*100, k_err[2],k_err[3])
+
 colors=["#0000FF", "#00FF00", "#FF0066"]
 sepal_length = X[: , 0]
 petal_lenght = X[: , 2]
@@ -119,4 +120,4 @@ for i in range(len(Y)):
 ax3.set_xlabel('Petal width')
 ax3.set_ylabel('Sepal length')
 ax3.set_zlabel('Petal length')
-plt.show()'''
+plt.show()
