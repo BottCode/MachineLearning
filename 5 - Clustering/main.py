@@ -1,9 +1,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
-# Though the following import is not directly being used, it is required
-# for 3D projection to work
 from mpl_toolkits.mplot3d import Axes3D
-
+import plotly.plotly as py
+import plotly.tools as tls
 from sklearn.cluster import AgglomerativeClustering, KMeans
 from sklearn.datasets import load_iris
 
@@ -68,25 +67,36 @@ def errors(data):
     
     return [num_of_misclassified, wrong_k1/50, wrong_k2/50, wrong_k3/50]
 
+def printErr(err_data):
+    return "Misclassified points: " + str(err_data[0]) + "\n Error Percentual: (#data in the wrong cluster) / (# cluster size): \n Cluster 0: " + str(err_data[1]*100) + "%\n Cluster 1: " + str(err_data[2]*100) + "%\n Cluster 2: " + str(err_data[3]*100) + "%"
+
 dataset = load_iris()
 X = dataset.data
 Y = dataset.target
 
 AggCluster = AgglomerativeClustering(n_clusters = 3).fit_predict(X)
+AggComplete = AgglomerativeClustering(n_clusters = 3, linkage = "complete").fit_predict(X)
+AggAverage = AgglomerativeClustering(n_clusters = 3, linkage = "average").fit_predict(X)
+AggSingle = AgglomerativeClustering(n_clusters = 3, linkage = "single").fit_predict(X)
 KCluster= KMeans(n_clusters = 3).fit_predict(X)
 
 replace()
+compl_err = errors(AggComplete)
 agg_err = errors(AggCluster)
+avg_err = errors(AggAverage)
+sng_err = errors(AggSingle)
 k_err = errors(KCluster)
 
-print("Aggregative:\nMisclassified points: ", agg_err[0], "\n Error Percentual: (#data in the wrong cluster) / (# cluster size): \n Cluster 0, 1, 2:",agg_err[1]*100, agg_err[2],agg_err[3])
-print("K-means:\nMisclassified points: ", k_err[0], "\n Error Percentual: (#data in the wrong cluster) / (# cluster size): \n Cluster 0, 1, 2:",k_err[1]*100, k_err[2],k_err[3])
+print("Ward Aggregative:\n",printErr(agg_err))
+print("Complete Aggregative:\n",printErr(compl_err))
+print("Average Aggregative:\n",printErr(avg_err))
+print("Single Aggregative:\n",printErr(sng_err))
+print("K-Means Aggregative:\n",printErr(k_err))
 
 colors=["#0000FF", "#00FF00", "#FF0066"]
 sepal_length = X[: , 0]
 petal_lenght = X[: , 2]
 petal_width = X[: , 3]
-
 
 
 fig = plt.figure()
